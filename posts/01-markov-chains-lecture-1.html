@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-08-30">
+
+<title>Lecture 1: Markov Chains – Stoch Pro</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-929c1de2473219e9e843865b955a190c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Stoch Pro</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../lectures.html"> 
+<span class="menu-text">Lectures</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#definition-of-a-markov-chain" id="toc-definition-of-a-markov-chain" class="nav-link active" data-scroll-target="#definition-of-a-markov-chain">1. Definition of a Markov chain</a>
+  <ul class="collapse">
+  <li><a href="#a-small-point-about-conditioning" id="toc-a-small-point-about-conditioning" class="nav-link" data-scroll-target="#a-small-point-about-conditioning">A small point about conditioning</a></li>
+  </ul></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">2. Examples</a>
+  <ul class="collapse">
+  <li><a href="#example-1-an-i.i.d.-sequence" id="toc-example-1-an-i.i.d.-sequence" class="nav-link" data-scroll-target="#example-1-an-i.i.d.-sequence">Example 1: An i.i.d. sequence</a></li>
+  <li><a href="#example-2-random-walk-on-a-countable-group" id="toc-example-2-random-walk-on-a-countable-group" class="nav-link" data-scroll-target="#example-2-random-walk-on-a-countable-group">Example 2: Random walk on a countable group</a></li>
+  </ul></li>
+  <li><a href="#conditional-expectation-formulation-of-the-markov-property" id="toc-conditional-expectation-formulation-of-the-markov-property" class="nav-link" data-scroll-target="#conditional-expectation-formulation-of-the-markov-property">3. Conditional-expectation formulation of the Markov property</a>
+  <ul class="collapse">
+  <li><a href="#proof" id="toc-proof" class="nav-link" data-scroll-target="#proof">Proof</a></li>
+  <li><a href="#remark-the-converse" id="toc-remark-the-converse" class="nav-link" data-scroll-target="#remark-the-converse">Remark: the converse</a></li>
+  </ul></li>
+  <li><a href="#we-need-not-condition-on-consecutive-past-times" id="toc-we-need-not-condition-on-consecutive-past-times" class="nav-link" data-scroll-target="#we-need-not-condition-on-consecutive-past-times">4. We need not condition on consecutive past times</a></li>
+  <li><a href="#exercise-1" id="toc-exercise-1" class="nav-link" data-scroll-target="#exercise-1">Exercise 1</a></li>
+  <li><a href="#transition-probabilities-as-an-abstract-object" id="toc-transition-probabilities-as-an-abstract-object" class="nav-link" data-scroll-target="#transition-probabilities-as-an-abstract-object">5. Transition probabilities as an abstract object</a></li>
+  <li><a href="#construction-of-a-markov-chain-from-its-transition-probabilities" id="toc-construction-of-a-markov-chain-from-its-transition-probabilities" class="nav-link" data-scroll-target="#construction-of-a-markov-chain-from-its-transition-probabilities">6. Construction of a Markov chain from its transition probabilities</a>
+  <ul class="collapse">
+  <li><a href="#exact-cylinder-sets" id="toc-exact-cylinder-sets" class="nav-link" data-scroll-target="#exact-cylinder-sets">Exact cylinder sets</a></li>
+  <li><a href="#the-cylinder-sigma-field" id="toc-the-cylinder-sigma-field" class="nav-link" data-scroll-target="#the-cylinder-sigma-field">The cylinder <span class="math inline">\(\sigma\)</span>-field</a></li>
+  </ul></li>
+  <li><a href="#exercise-2" id="toc-exercise-2" class="nav-link" data-scroll-target="#exercise-2">Exercise 2</a></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">Reference</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lecture 1: Markov Chains</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 30, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Let <span class="math inline">\((\Omega,\mathcal F,\mathbb P)\)</span> be a probability space and let</p>
+<p><span class="math display">\[
+X_0,X_1,X_2,\ldots
+\]</span></p>
+<p>be random variables taking values in a countable set <span class="math inline">\(S\)</span>. We give <span class="math inline">\(S\)</span> the discrete <span class="math inline">\(\sigma\)</span>-field <span class="math inline">\(2^S\)</span>.</p>
+<section id="definition-of-a-markov-chain" class="level2">
+<h2 class="anchored" data-anchor-id="definition-of-a-markov-chain">1. Definition of a Markov chain</h2>
+<p><strong>Definition.</strong> The sequence <span class="math inline">\(\{X_n\}_{n\geq 0}\)</span> is called a <strong>Markov chain</strong> if, for every <span class="math inline">\(n\geq 0\)</span> and every <span class="math inline">\(i_0,\ldots,i_n,j\in S\)</span> such that the conditioning event has positive probability,</p>
+<p><span class="math display">\[
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n,X_{n-1}=i_{n-1},\ldots,X_0=i_0
+\right)
+=
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n
+\right).
+\tag{1}
+\]</span></p>
+<p>Thus, once the present state <span class="math inline">\(X_n\)</span> is specified, the conditional distribution of <span class="math inline">\(X_{n+1}\)</span> does not depend on the values taken by the chain before time <span class="math inline">\(n\)</span>.</p>
+<p>If</p>
+<p><span class="math display">\[
+\mathbb P(X_{n+1}=j\mid X_n=i)
+\]</span></p>
+<p>does not depend on <span class="math inline">\(n\)</span>, then the chain is called <strong>time-homogeneous</strong>. In that case we write</p>
+<p><span class="math display">\[
+p(i,j)
+=
+\mathbb P(X_{n+1}=j\mid X_n=i).
+\tag{2}
+\]</span></p>
+<p>The number <span class="math inline">\(p(i,j)\)</span> is called the <strong>transition probability from <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span></strong>.</p>
+<p>For each fixed <span class="math inline">\(i\in S\)</span>,</p>
+<p><span class="math display">\[
+p(i,j)\geq 0
+\]</span></p>
+<p>for every <span class="math inline">\(j\in S\)</span>, and</p>
+<p><span class="math display">\[
+\sum_{j\in S}p(i,j)=1.
+\tag{3}
+\]</span></p>
+<p>Throughout these notes, unless explicitly stated otherwise, our Markov chains will be time-homogeneous.</p>
+<section id="a-small-point-about-conditioning" class="level3">
+<h3 class="anchored" data-anchor-id="a-small-point-about-conditioning">A small point about conditioning</h3>
+<p>When we write a conditional probability such as</p>
+<p><span class="math display">\[
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n,\ldots,X_0=i_0
+\right),
+\]</span></p>
+<p>we are assuming that</p>
+<p><span class="math display">\[
+\mathbb P(X_n=i_n,\ldots,X_0=i_0)&gt;0.
+\]</span></p>
+<p>The conditional-expectation formulation below removes the need to keep repeating this qualification, since conditional expectations are defined up to almost-sure equality.</p>
+</section>
+</section>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">2. Examples</h2>
+<section id="example-1-an-i.i.d.-sequence" class="level3">
+<h3 class="anchored" data-anchor-id="example-1-an-i.i.d.-sequence">Example 1: An i.i.d. sequence</h3>
+<p>Let <span class="math inline">\(X_0,X_1,\ldots\)</span> be i.i.d. random variables taking values in <span class="math inline">\(S\)</span>.</p>
+<p>Then</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n,\ldots,X_0=i_0
+\right)\\
+&amp;\qquad =
+\mathbb P(X_{n+1}=j)
+\end{aligned}
+\]</span></p>
+<p>by independence. Similarly,</p>
+<p><span class="math display">\[
+\mathbb P(X_{n+1}=j\mid X_n=i_n)
+=
+\mathbb P(X_{n+1}=j).
+\]</span></p>
+<p>Hence</p>
+<p><span class="math display">\[
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n,\ldots,X_0=i_0
+\right)
+=
+\mathbb P(X_{n+1}=j\mid X_n=i_n),
+\]</span></p>
+<p>so <span class="math inline">\(\{X_n\}\)</span> is a Markov chain.</p>
+<p>Since the random variables are identically distributed,</p>
+<p><span class="math display">\[
+\mathbb P(X_{n+1}=j)
+=
+\mathbb P(X_0=j)
+\]</span></p>
+<p>for every <span class="math inline">\(n\)</span>. Therefore the transition probabilities do not depend on time, and the chain is time-homogeneous.</p>
+<p>In fact,</p>
+<p><span class="math display">\[
+p(i,j)=\mathbb P(X_0=j),
+\]</span></p>
+<p>so the transition probability does not depend on <span class="math inline">\(i\)</span> either.</p>
+<p>Thus an i.i.d. sequence is a particularly simple Markov chain: the next state does not even depend on the present one.</p>
+</section>
+<section id="example-2-random-walk-on-a-countable-group" class="level3">
+<h3 class="anchored" data-anchor-id="example-2-random-walk-on-a-countable-group">Example 2: Random walk on a countable group</h3>
+<p>Let <span class="math inline">\(G\)</span> be a countable group. For simplicity of notation, write the group operation additively.</p>
+<p>Let</p>
+<p><span class="math display">\[
+X_1,X_2,\ldots
+\]</span></p>
+<p>be i.i.d. <span class="math inline">\(G\)</span>-valued random variables and define</p>
+<p><span class="math display">\[
+S_0=0,
+\qquad
+S_m=\sum_{r=1}^{m}X_r.
+\tag{4}
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+S_n=S_{n-1}+X_n.
+\]</span></p>
+<p>We claim that <span class="math inline">\(\{S_n\}_{n\geq 0}\)</span> is a Markov chain.</p>
+<p>Suppose</p>
+<p><span class="math display">\[
+S_{n-1}=i_{n-1},\ldots,S_0=i_0.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+S_n=j
+\]</span></p>
+<p>if and only if</p>
+<p><span class="math display">\[
+X_n=j-i_{n-1}.
+\]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb P
+\left(
+S_n=j
+\mid
+S_{n-1}=i_{n-1},\ldots,S_0=i_0
+\right)\\
+&amp;\qquad =
+\mathbb P
+\left(
+X_n=j-i_{n-1}
+\mid
+S_{n-1}=i_{n-1},\ldots,S_0=i_0
+\right).
+\end{aligned}
+\tag{5}
+\]</span></p>
+<p>Now</p>
+<p><span class="math display">\[
+S_0,S_1,\ldots,S_{n-1}
+\]</span></p>
+<p>are all functions of</p>
+<p><span class="math display">\[
+X_1,\ldots,X_{n-1}.
+\]</span></p>
+<p>Hence</p>
+<p><span class="math display">\[
+\sigma(S_0,\ldots,S_{n-1})
+\subseteq
+\sigma(X_1,\ldots,X_{n-1}).
+\]</span></p>
+<p>But <span class="math inline">\(X_n\)</span> is independent of</p>
+<p><span class="math display">\[
+\sigma(X_1,\ldots,X_{n-1}),
+\]</span></p>
+<p>and therefore it is independent of</p>
+<p><span class="math display">\[
+\sigma(S_0,\ldots,S_{n-1}).
+\]</span></p>
+<p>Consequently,</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb P
+\left(
+X_n=j-i_{n-1}
+\mid
+S_{n-1}=i_{n-1},\ldots,S_0=i_0
+\right)\\
+&amp;\qquad =
+\mathbb P(X_n=j-i_{n-1}).
+\end{aligned}
+\]</span></p>
+<p>Since the <span class="math inline">\(X_n\)</span> are identically distributed,</p>
+<p><span class="math display">\[
+\mathbb P(X_n=j-i)
+=
+\mathbb P(X_1=j-i),
+\]</span></p>
+<p>which does not depend on <span class="math inline">\(n\)</span>.</p>
+<p>Thus <span class="math inline">\(\{S_n\}\)</span> is a time-homogeneous Markov chain with transition probabilities</p>
+<p><span class="math display">\[
+p(i,j)
+=
+\mathbb P(X_1=j-i).
+\tag{6}
+\]</span></p>
+<p>For a non-abelian group the same argument works with the group operation written multiplicatively.</p>
+</section>
+</section>
+<section id="conditional-expectation-formulation-of-the-markov-property" class="level2">
+<h2 class="anchored" data-anchor-id="conditional-expectation-formulation-of-the-markov-property">3. Conditional-expectation formulation of the Markov property</h2>
+<p>The Markov property can be written more cleanly using conditional expectation.</p>
+<p>Let</p>
+<p><span class="math display">\[
+\mathcal F_n^X
+=
+\sigma(X_0,X_1,\ldots,X_n).
+\]</span></p>
+<p><strong>Lemma.</strong> Let <span class="math inline">\(\{X_n\}_{n\geq0}\)</span> be a Markov chain with countable state space <span class="math inline">\(S\)</span>. If <span class="math inline">\(f:S\to[0,\infty]\)</span> is Borel measurable, then</p>
+<p><span class="math display">\[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right)
+\quad\text{a.s.}
+\tag{7}
+\]</span></p>
+<p>If <span class="math inline">\(f(X_{n+1})\)</span> is integrable, then the same conclusion holds for real-valued <span class="math inline">\(f\)</span>.</p>
+<section id="proof" class="level3">
+<h3 class="anchored" data-anchor-id="proof">Proof</h3>
+<p>We prove this in the same order in which measurable functions are built: first indicators, then simple functions, and finally general nonnegative measurable functions.</p>
+<section id="step-1-indicator-functions" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-indicator-functions">Step 1: Indicator functions</h4>
+<p>Fix <span class="math inline">\(j\in S\)</span> and take</p>
+<p><span class="math display">\[
+f(x)=\mathbf 1_{\{j\}}(x).
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+f(X_{n+1})
+=
+\mathbf 1_{\{X_{n+1}=j\}}.
+\]</span></p>
+<p>For every <span class="math inline">\(i_0,\ldots,i_n\in S\)</span> for which</p>
+<p><span class="math display">\[
+\mathbb P(X_0=i_0,\ldots,X_n=i_n)&gt;0,
+\]</span></p>
+<p>we have</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}=j\}}
+\mid
+X_0=i_0,\ldots,X_n=i_n
+\right)\\
+&amp;\qquad =
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_0=i_0,\ldots,X_n=i_n
+\right).
+\end{aligned}
+\]</span></p>
+<p>By the Markov property,</p>
+<p><span class="math display">\[
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_0=i_0,\ldots,X_n=i_n
+\right)
+=
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n
+\right).
+\]</span></p>
+<p>Again using the relation between indicators and conditional probabilities,</p>
+<p><span class="math display">\[
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n
+\right)
+=
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}=j\}}
+\mid
+X_n=i_n
+\right).
+\]</span></p>
+<p>Hence</p>
+<p><span class="math display">\[
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}=j\}}
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}=j\}}
+\mid
+X_n
+\right)
+\quad\text{a.s.}
+\tag{8}
+\]</span></p>
+<p>The same conclusion holds for the indicator of an arbitrary subset <span class="math inline">\(A\subseteq S\)</span>.</p>
+<p>Indeed, because <span class="math inline">\(S\)</span> is countable,</p>
+<p><span class="math display">\[
+\mathbf 1_{\{X_{n+1}\in A\}}
+=
+\sum_{j\in A}\mathbf 1_{\{X_{n+1}=j\}},
+\]</span></p>
+<p>where the sum is understood as the increasing limit of the finite partial sums. Equivalently, one may simply sum the conditional probabilities over <span class="math inline">\(j\in A\)</span>. Thus</p>
+<p><span class="math display">\[
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}\in A\}}
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}\in A\}}
+\mid
+X_n
+\right).
+\tag{9}
+\]</span></p>
+</section>
+<section id="step-2-simple-functions" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-simple-functions">Step 2: Simple functions</h4>
+<p>Now let <span class="math inline">\(f\)</span> be a nonnegative simple function on <span class="math inline">\(S\)</span>. Write</p>
+<p><span class="math display">\[
+f
+=
+\sum_{r=1}^{m}a_r\mathbf 1_{A_r},
+\qquad
+a_r\geq0,
+\]</span></p>
+<p>where <span class="math inline">\(A_r\subseteq S\)</span>.</p>
+<p>Then</p>
+<p><span class="math display">\[
+f(X_{n+1})
+=
+\sum_{r=1}^{m}
+a_r
+\mathbf 1_{\{X_{n+1}\in A_r\}}.
+\]</span></p>
+<p>Using linearity of conditional expectation and (9),</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)\\
+&amp;\qquad =
+\sum_{r=1}^{m}
+a_r
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}\in A_r\}}
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)\\
+&amp;\qquad =
+\sum_{r=1}^{m}
+a_r
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}\in A_r\}}
+\mid
+X_n
+\right)\\
+&amp;\qquad =
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+\end{aligned}
+\tag{10}
+\]</span></p>
+<p>Thus the result is true for every nonnegative simple function.</p>
+</section>
+<section id="step-3-nonnegative-borel-functions" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-nonnegative-borel-functions">Step 3: Nonnegative Borel functions</h4>
+<p>Let now</p>
+<p><span class="math display">\[
+f:S\to[0,\infty]
+\]</span></p>
+<p>be Borel measurable.</p>
+<p>There exists a sequence of nonnegative simple functions <span class="math inline">\(f_m\)</span> such that</p>
+<p><span class="math display">\[
+f_m\uparrow f
+\]</span></p>
+<p>pointwise.</p>
+<p>Therefore</p>
+<p><span class="math display">\[
+f_m(X_{n+1})
+\uparrow
+f(X_{n+1}).
+\]</span></p>
+<p>For each <span class="math inline">\(m\)</span>, Step 2 gives</p>
+<p><span class="math display">\[
+\mathbb E
+\left(
+f_m(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f_m(X_{n+1})
+\mid
+X_n
+\right).
+\tag{11}
+\]</span></p>
+<p>Conditional expectation respects increasing limits: if <span class="math inline">\(Y_m\uparrow Y\)</span> with all <span class="math inline">\(Y_m\geq0\)</span>, then</p>
+<p><span class="math display">\[
+\mathbb E(Y_m\mid\mathcal G)
+\uparrow
+\mathbb E(Y\mid\mathcal G)
+\quad\text{a.s.}
+\]</span></p>
+<p>Hence, letting <span class="math inline">\(m\to\infty\)</span> in (11),</p>
+<p><span class="math display">\[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+\]</span></p>
+<p>This proves (7) for every nonnegative Borel function <span class="math inline">\(f\)</span>.</p>
+<p>Finally, if <span class="math inline">\(f(X_{n+1})\)</span> is integrable, write</p>
+<p><span class="math display">\[
+f=f^+-f^-.
+\]</span></p>
+<p>Both <span class="math inline">\(f^+\)</span> and <span class="math inline">\(f^-\)</span> are nonnegative, so applying the result to them separately and subtracting gives</p>
+<p><span class="math display">\[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+\]</span></p>
+<p>This completes the proof.</p>
+</section>
+</section>
+<section id="remark-the-converse" class="level3">
+<h3 class="anchored" data-anchor-id="remark-the-converse">Remark: the converse</h3>
+<p>The converse is immediate once the statement is assumed for every Borel function <span class="math inline">\(f\)</span>.</p>
+<p>Suppose</p>
+<p><span class="math display">\[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right)
+\]</span></p>
+<p>for every bounded Borel <span class="math inline">\(f\)</span>.</p>
+<p>Take</p>
+<p><span class="math display">\[
+f(x)=\mathbf 1_{\{j\}}(x).
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb P
+\left(
+X_{n+1}=j
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)\\
+&amp;\qquad =
+\mathbb P(X_{n+1}=j\mid X_n),
+\end{aligned}
+\]</span></p>
+<p>which is precisely the Markov property.</p>
+<p>Notice that equality only for the particular choice <span class="math inline">\(f(x)=x\)</span> would not be enough: equality of conditional means does not in general determine equality of conditional distributions. The statement for all indicator functions, or equivalently all bounded Borel functions, does.</p>
+</section>
+</section>
+<section id="we-need-not-condition-on-consecutive-past-times" class="level2">
+<h2 class="anchored" data-anchor-id="we-need-not-condition-on-consecutive-past-times">4. We need not condition on consecutive past times</h2>
+<p>A useful consequence of the lemma is that the earlier times appearing in the conditioning need not be consecutive.</p>
+<p>Let</p>
+<p><span class="math display">\[
+0\leq r_1&lt;r_2&lt;\cdots&lt;r_k&lt;n
+\]</span></p>
+<p>and consider</p>
+<p><span class="math display">\[
+\mathcal G
+=
+\sigma(X_{r_1},\ldots,X_{r_k},X_n).
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\mathcal G
+\subseteq
+\sigma(X_0,\ldots,X_n).
+\]</span></p>
+<p>Let <span class="math inline">\(f:S\to[0,\infty]\)</span> be Borel measurable. By the tower property,</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\mathcal G
+\right)\\
+&amp;\qquad =
+\mathbb E
+\left[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+\Bigm|
+\mathcal G
+\right].
+\end{aligned}
+\]</span></p>
+<p>By the lemma,</p>
+<p><span class="math display">\[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+\]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\mathcal G
+\right)\\
+&amp;\qquad =
+\mathbb E
+\left[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right)
+\Bigm|
+\mathcal G
+\right].
+\end{aligned}
+\]</span></p>
+<p>But</p>
+<p><span class="math display">\[
+\mathbb E(f(X_{n+1})\mid X_n)
+\]</span></p>
+<p>is <span class="math inline">\(\sigma(X_n)\)</span>-measurable, and</p>
+<p><span class="math display">\[
+\sigma(X_n)\subseteq\mathcal G.
+\]</span></p>
+<p>Hence</p>
+<p><span class="math display">\[
+\mathbb E
+\left[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right)
+\Bigm|
+\mathcal G
+\right]
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+\]</span></p>
+<p>Thus</p>
+<p><span class="math display">\[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_{r_1},\ldots,X_{r_k},X_n
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+\tag{12}
+\]</span></p>
+<p>Taking</p>
+<p><span class="math display">\[
+f(x)=\mathbf 1_{\{j\}}(x)
+\]</span></p>
+<p>gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i,\,
+X_{r_1}=i_1,\ldots,X_{r_k}=i_k
+\right)\\
+&amp;\qquad =
+\mathbb P(X_{n+1}=j\mid X_n=i),
+\end{aligned}
+\tag{13}
+\]</span></p>
+<p>whenever the conditioning event has positive probability.</p>
+<p>So in the Markov property, the past variables we retain need not occur at consecutive times.</p>
+</section>
+<section id="exercise-1" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-1">Exercise 1</h2>
+<p>Let <span class="math inline">\(0\leq k&lt;n+1\)</span>.</p>
+<p>First prove that</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_k=i_k,X_{k-1}=i_{k-1},\ldots,X_0=i_0
+\right)\\
+&amp;\qquad =
+\mathbb P(X_{n+1}=j\mid X_k=i_k).
+\end{aligned}
+\tag{14}
+\]</span></p>
+<p>Thus, even when <span class="math inline">\(X_{n+1}\)</span> is several time-steps ahead of <span class="math inline">\(X_k\)</span>, the entire history up to time <span class="math inline">\(k\)</span> can be replaced by the single variable <span class="math inline">\(X_k\)</span>.</p>
+<p>Then prove the corresponding conditional-expectation statement:</p>
+<p><span class="math display">\[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_k)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_k
+\right)
+\tag{15}
+\]</span></p>
+<p>for every nonnegative Borel <span class="math inline">\(f\)</span>, and hence for every integrable <span class="math inline">\(f\)</span>.</p>
+<p>A natural first step is to prove (14) by induction on <span class="math inline">\(n+1-k\)</span>.</p>
+<p>The first correct solution posted in the comments, with <strong>Exercise 1</strong> clearly marked, will be cited and added to the notes.</p>
+</section>
+<section id="transition-probabilities-as-an-abstract-object" class="level2">
+<h2 class="anchored" data-anchor-id="transition-probabilities-as-an-abstract-object">5. Transition probabilities as an abstract object</h2>
+<p>We now forget, for the moment, about an already existing Markov chain and start only with a possible transition rule.</p>
+<p><strong>Definition.</strong> A function</p>
+<p><span class="math display">\[
+p:S\times S\longrightarrow\mathbb R
+\]</span></p>
+<p>is called a <strong>transition probability function</strong> if</p>
+<p><span class="math display">\[
+p(i,j)\geq0
+\]</span></p>
+<p>for all <span class="math inline">\(i,j\in S\)</span>, and</p>
+<p><span class="math display">\[
+\sum_{j\in S}p(i,j)=1
+\]</span></p>
+<p>for every <span class="math inline">\(i\in S\)</span>.</p>
+<p>Thus, for each fixed <span class="math inline">\(i\)</span>, the numbers</p>
+<p><span class="math display">\[
+\{p(i,j):j\in S\}
+\]</span></p>
+<p>form a probability distribution on <span class="math inline">\(S\)</span>.</p>
+<p>The transition probabilities of every time-homogeneous Markov chain satisfy these conditions.</p>
+<p>The converse question is now natural:</p>
+<blockquote class="blockquote">
+<p>Given a countable state space <span class="math inline">\(S\)</span> and a transition probability function <span class="math inline">\(p\)</span>, can we construct a Markov chain having exactly these transition probabilities?</p>
+</blockquote>
+<p>The answer is yes.</p>
+</section>
+<section id="construction-of-a-markov-chain-from-its-transition-probabilities" class="level2">
+<h2 class="anchored" data-anchor-id="construction-of-a-markov-chain-from-its-transition-probabilities">6. Construction of a Markov chain from its transition probabilities</h2>
+<p>Let <span class="math inline">\(S\)</span> be countable and let</p>
+<p><span class="math display">\[
+p:S\times S\to[0,1]
+\]</span></p>
+<p>be a transition probability function.</p>
+<p>Choose a probability measure <span class="math inline">\(\mu\)</span> on <span class="math inline">\(S\)</span>; this will be the distribution of the initial state.</p>
+<p>For the construction it is not necessary that every point have positive <span class="math inline">\(\mu\)</span>-probability. However, if we want a measure on <span class="math inline">\(S\)</span> having no nonempty null set, we may choose <span class="math inline">\(\mu\)</span> so that</p>
+<p><span class="math display">\[
+\mu(i)&gt;0
+\]</span></p>
+<p>for every <span class="math inline">\(i\in S\)</span>.</p>
+<p>For example, if <span class="math inline">\(S\)</span> is finite, we may take the discrete uniform distribution</p>
+<p><span class="math display">\[
+\mu(i)=\frac1{|S|}.
+\]</span></p>
+<p>If</p>
+<p><span class="math display">\[
+S=\{s_1,s_2,\ldots\},
+\]</span></p>
+<p>we may take</p>
+<p><span class="math display">\[
+\mu(s_r)=\frac1{2^r},
+\qquad r\geq1,
+\]</span></p>
+<p>since</p>
+<p><span class="math display">\[
+\sum_{r=1}^{\infty}\frac1{2^r}=1.
+\]</span></p>
+<p>Now take the path space</p>
+<p><span class="math display">\[
+\Omega=S^{\mathbb N_0}.
+\]</span></p>
+<p>Thus an element of <span class="math inline">\(\Omega\)</span> is an infinite sequence</p>
+<p><span class="math display">\[
+\omega=(\omega_0,\omega_1,\omega_2,\ldots).
+\]</span></p>
+<p>For <span class="math inline">\(n\geq0\)</span>, define the coordinate projection</p>
+<p><span class="math display">\[
+X_n(\omega)=\omega_n.
+\tag{16}
+\]</span></p>
+<p>We want to put a probability measure on <span class="math inline">\(\Omega\)</span> such that these coordinate projections form a Markov chain with transition probability <span class="math inline">\(p\)</span>.</p>
+<section id="exact-cylinder-sets" class="level3">
+<h3 class="anchored" data-anchor-id="exact-cylinder-sets">Exact cylinder sets</h3>
+<p>For <span class="math inline">\(i_0,\ldots,i_n\in S\)</span>, define</p>
+<p><span class="math display">\[
+A_{i_0,\ldots,i_n}
+=
+\{
+\omega\in\Omega:
+\omega_0=i_0,\ldots,\omega_n=i_n
+\}.
+\tag{17}
+\]</span></p>
+<p>Thus <span class="math inline">\(A_{i_0,\ldots,i_n}\)</span> is the event that the first <span class="math inline">\(n+1\)</span> coordinates of the path are exactly</p>
+<p><span class="math display">\[
+i_0,i_1,\ldots,i_n.
+\]</span></p>
+<p>These sets have the useful property already visible from their definition:</p>
+<p>if</p>
+<p><span class="math display">\[
+A_{i_0,\ldots,i_n}
+\quad\text{and}\quad
+A_{j_0,\ldots,j_m}
+\]</span></p>
+<p>are two such cylinder sets, then either they are disjoint, or the longer specification extends the shorter one, in which case one cylinder is contained in the other.</p>
+<p>For example,</p>
+<p><span class="math display">\[
+A_{1,2,3,4}\subseteq A_{1,2},
+\]</span></p>
+<p>whereas</p>
+<p><span class="math display">\[
+A_{1,2,3}
+\cap
+A_{1,5}
+=
+\varnothing.
+\]</span></p>
+<p>On an exact cylinder we prescribe</p>
+<p><span class="math display">\[
+\boxed{
+\mathbb P(A_{i_0,\ldots,i_n})
+=
+\mu(i_0)
+p(i_0,i_1)
+p(i_1,i_2)
+\cdots
+p(i_{n-1},i_n).
+}
+\tag{18}
+\]</span></p>
+<p>This is the only reasonable formula: start at <span class="math inline">\(i_0\)</span> with probability <span class="math inline">\(\mu(i_0)\)</span>, then make the successive transitions</p>
+<p><span class="math display">\[
+i_0\to i_1\to\cdots\to i_n.
+\]</span></p>
+<p>The first thing to check is consistency.</p>
+<p>If we specify the path only up to <span class="math inline">\(i_n\)</span>, then summing over all possibilities for the next state must return the same probability. Indeed,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sum_{j\in S}
+\mathbb P(A_{i_0,\ldots,i_n,j})
+&amp;=
+\sum_{j\in S}
+\mu(i_0)
+p(i_0,i_1)\cdots p(i_{n-1},i_n)p(i_n,j)\\
+&amp;=
+\mu(i_0)
+p(i_0,i_1)\cdots p(i_{n-1},i_n)
+\sum_{j\in S}p(i_n,j)\\
+&amp;=
+\mu(i_0)
+p(i_0,i_1)\cdots p(i_{n-1},i_n)\\
+&amp;=
+\mathbb P(A_{i_0,\ldots,i_n}).
+\end{aligned}
+\tag{19}
+\]</span></p>
+<p>The equality in the third line follows from</p>
+<p><span class="math display">\[
+\sum_{j\in S}p(i_n,j)=1.
+\]</span></p>
+<p>More generally, summing over any finite number of unspecified future coordinates gives back the probability of the shorter cylinder.</p>
+</section>
+<section id="the-cylinder-sigma-field" class="level3">
+<h3 class="anchored" data-anchor-id="the-cylinder-sigma-field">The cylinder <span class="math inline">\(\sigma\)</span>-field</h3>
+<p>Let <span class="math inline">\(\mathcal F\)</span> be the <span class="math inline">\(\sigma\)</span>-field on <span class="math inline">\(S^{\mathbb N_0}\)</span> generated by the finite-coordinate cylinder sets.</p>
+<p>For a completely formal use of the extension theorem, it is convenient to allow a cylinder to specify an arbitrary set of possible values of the first finitely many coordinates.</p>
+<p>For <span class="math inline">\(B\subseteq S^{n+1}\)</span>, write</p>
+<p><span class="math display">\[
+C_n(B)
+=
+\{
+\omega\in\Omega:
+(\omega_0,\ldots,\omega_n)\in B
+\}.
+\tag{20}
+\]</span></p>
+<p>Since <span class="math inline">\(S\)</span> is countable, <span class="math inline">\(S^{n+1}\)</span> is countable. Define</p>
+<p><span class="math display">\[
+\mu_n(B)
+=
+\sum_{(i_0,\ldots,i_n)\in B}
+\mu(i_0)
+p(i_0,i_1)\cdots p(i_{n-1},i_n).
+\tag{21}
+\]</span></p>
+<p>Then <span class="math inline">\(\mu_n\)</span> is a probability measure on <span class="math inline">\(S^{n+1}\)</span>.</p>
+<p>Equation (19) says precisely that these finite-dimensional probability measures are consistent:</p>
+<p><span class="math display">\[
+\mu_{n+1}(B\times S)=\mu_n(B).
+\tag{22}
+\]</span></p>
+<p>Thus the probability assigned to a cylinder does not depend on whether we regard it as a condition on the first <span class="math inline">\(n+1\)</span> coordinates or as the same condition with some later coordinates left unrestricted.</p>
+<p>The collection of finite-coordinate cylinders is an algebra, and the consistent probabilities above define the usual cylinder premeasure on it. By the Carathéodory extension theorem in its cylinder-set form, this premeasure extends uniquely to a probability measure</p>
+<p><span class="math display">\[
+\mathbb P
+\]</span></p>
+<p>on</p>
+<p><span class="math display">\[
+(\Omega,\mathcal F).
+\]</span></p>
+<p>Hence we have constructed a genuine probability space carrying the coordinate random variables</p>
+<p><span class="math display">\[
+X_n(\omega)=\omega_n.
+\]</span></p>
+</section>
+</section>
+<section id="exercise-2" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-2">Exercise 2</h2>
+<p>Prove that the coordinate projections</p>
+<p><span class="math display">\[
+X_n(\omega)=\omega_n
+\]</span></p>
+<p>form a time-homogeneous Markov chain on <span class="math inline">\(S\)</span> with transition probability function <span class="math inline">\(p\)</span>.</p>
+<p>In particular, show that whenever</p>
+<p><span class="math display">\[
+\mathbb P
+\left(
+X_0=i_0,\ldots,X_n=i_n
+\right)&gt;0,
+\]</span></p>
+<p>we have</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_0=i_0,\ldots,X_n=i_n
+\right)\\
+&amp;\qquad =
+p(i_n,j),
+\end{aligned}
+\tag{23}
+\]</span></p>
+<p>and therefore</p>
+<p><span class="math display">\[
+\mathbb P(X_{n+1}=j\mid X_n=i)=p(i,j).
+\tag{24}
+\]</span></p>
+<p>The first correct solution posted in the comments, with <strong>Exercise 2</strong> clearly marked, will be cited and added to the notes.</p>
+<p>Consequently, every transition probability function on a countable state space can be realised by a time-homogeneous Markov chain.</p>
+</section>
+<section id="reference" class="level2">
+<h2 class="anchored" data-anchor-id="reference">Reference</h2>
+<p>Richard Durrett, <em>Essentials of Stochastic Processes</em>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/sourishrory08-cmd\.github\.io\/stoch-pro-blog\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Stoch Pro</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Notes on stochastic processes</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
