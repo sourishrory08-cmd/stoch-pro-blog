@@ -1,0 +1,22 @@
+---
+title: "Lectures"
+description: "Index of lecture notes."
+toc: false
+---
+
+## I. Markov chains and Transition Probabilities
+
+1. [Lecture 1 — The Markov Property](posts/01-markov-chains-lecture-1.qmd)  
+   Countable-state chains, the conditional-expectation formulation, and construction from a transition kernel.
+
+## II. Poisson processes
+
+To be added.
+
+## III. Brownian motion
+
+To be added.
+
+## IV. Martingales
+
+To be added.

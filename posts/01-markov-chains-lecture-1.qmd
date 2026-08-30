@@ -1,0 +1,1205 @@
+---
+title: "Lecture 1: Markov Chains"
+date: 2026-08-30
+toc: true
+toc-depth: 3
+---
+
+Let $(\Omega,\mathcal F,\mathbb P)$ be a probability space and let
+
+$$
+X_0,X_1,X_2,\ldots
+$$
+
+be random variables taking values in a countable set $S$. We give $S$ the discrete $\sigma$-field $2^S$.
+
+## 1. Definition of a Markov chain
+
+**Definition.** The sequence $\{X_n\}_{n\geq 0}$ is called a **Markov chain** if, for every $n\geq 0$ and every $i_0,\ldots,i_n,j\in S$ such that the conditioning event has positive probability,
+
+$$
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n,X_{n-1}=i_{n-1},\ldots,X_0=i_0
+\right)
+=
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n
+\right).
+\tag{1}
+$$
+
+Thus, once the present state $X_n$ is specified, the conditional distribution of $X_{n+1}$ does not depend on the values taken by the chain before time $n$.
+
+If
+
+$$
+\mathbb P(X_{n+1}=j\mid X_n=i)
+$$
+
+does not depend on $n$, then the chain is called **time-homogeneous**. In that case we write
+
+$$
+p(i,j)
+=
+\mathbb P(X_{n+1}=j\mid X_n=i).
+\tag{2}
+$$
+
+The number $p(i,j)$ is called the **transition probability from $i$ to $j$**.
+
+For each fixed $i\in S$,
+
+$$
+p(i,j)\geq 0
+$$
+
+for every $j\in S$, and
+
+$$
+\sum_{j\in S}p(i,j)=1.
+\tag{3}
+$$
+
+Throughout these notes, unless explicitly stated otherwise, our Markov chains will be time-homogeneous.
+
+### A small point about conditioning
+
+When we write a conditional probability such as
+
+$$
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n,\ldots,X_0=i_0
+\right),
+$$
+
+we are assuming that
+
+$$
+\mathbb P(X_n=i_n,\ldots,X_0=i_0)>0.
+$$
+
+The conditional-expectation formulation below removes the need to keep repeating this qualification, since conditional expectations are defined up to almost-sure equality.
+
+## 2. Examples
+
+### Example 1: An i.i.d. sequence
+
+Let $X_0,X_1,\ldots$ be i.i.d. random variables taking values in $S$.
+
+Then
+
+$$
+\begin{aligned}
+&\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n,\ldots,X_0=i_0
+\right)\\
+&\qquad =
+\mathbb P(X_{n+1}=j)
+\end{aligned}
+$$
+
+by independence. Similarly,
+
+$$
+\mathbb P(X_{n+1}=j\mid X_n=i_n)
+=
+\mathbb P(X_{n+1}=j).
+$$
+
+Hence
+
+$$
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n,\ldots,X_0=i_0
+\right)
+=
+\mathbb P(X_{n+1}=j\mid X_n=i_n),
+$$
+
+so $\{X_n\}$ is a Markov chain.
+
+Since the random variables are identically distributed,
+
+$$
+\mathbb P(X_{n+1}=j)
+=
+\mathbb P(X_0=j)
+$$
+
+for every $n$. Therefore the transition probabilities do not depend on time, and the chain is time-homogeneous.
+
+In fact,
+
+$$
+p(i,j)=\mathbb P(X_0=j),
+$$
+
+so the transition probability does not depend on $i$ either.
+
+Thus an i.i.d. sequence is a particularly simple Markov chain: the next state does not even depend on the present one.
+
+### Example 2: Random walk on a countable group
+
+Let $G$ be a countable group. For simplicity of notation, write the group operation additively.
+
+Let
+
+$$
+X_1,X_2,\ldots
+$$
+
+be i.i.d. $G$-valued random variables and define
+
+$$
+S_0=0,
+\qquad
+S_m=\sum_{r=1}^{m}X_r.
+\tag{4}
+$$
+
+Then
+
+$$
+S_n=S_{n-1}+X_n.
+$$
+
+We claim that $\{S_n\}_{n\geq 0}$ is a Markov chain.
+
+Suppose
+
+$$
+S_{n-1}=i_{n-1},\ldots,S_0=i_0.
+$$
+
+Then
+
+$$
+S_n=j
+$$
+
+if and only if
+
+$$
+X_n=j-i_{n-1}.
+$$
+
+Therefore
+
+$$
+\begin{aligned}
+&\mathbb P
+\left(
+S_n=j
+\mid
+S_{n-1}=i_{n-1},\ldots,S_0=i_0
+\right)\\
+&\qquad =
+\mathbb P
+\left(
+X_n=j-i_{n-1}
+\mid
+S_{n-1}=i_{n-1},\ldots,S_0=i_0
+\right).
+\end{aligned}
+\tag{5}
+$$
+
+Now
+
+$$
+S_0,S_1,\ldots,S_{n-1}
+$$
+
+are all functions of
+
+$$
+X_1,\ldots,X_{n-1}.
+$$
+
+Hence
+
+$$
+\sigma(S_0,\ldots,S_{n-1})
+\subseteq
+\sigma(X_1,\ldots,X_{n-1}).
+$$
+
+But $X_n$ is independent of
+
+$$
+\sigma(X_1,\ldots,X_{n-1}),
+$$
+
+and therefore it is independent of
+
+$$
+\sigma(S_0,\ldots,S_{n-1}).
+$$
+
+Consequently,
+
+$$
+\begin{aligned}
+&\mathbb P
+\left(
+X_n=j-i_{n-1}
+\mid
+S_{n-1}=i_{n-1},\ldots,S_0=i_0
+\right)\\
+&\qquad =
+\mathbb P(X_n=j-i_{n-1}).
+\end{aligned}
+$$
+
+Since the $X_n$ are identically distributed,
+
+$$
+\mathbb P(X_n=j-i)
+=
+\mathbb P(X_1=j-i),
+$$
+
+which does not depend on $n$.
+
+Thus $\{S_n\}$ is a time-homogeneous Markov chain with transition probabilities
+
+$$
+p(i,j)
+=
+\mathbb P(X_1=j-i).
+\tag{6}
+$$
+
+For a non-abelian group the same argument works with the group operation written multiplicatively.
+
+## 3. Conditional-expectation formulation of the Markov property
+
+The Markov property can be written more cleanly using conditional expectation.
+
+Let
+
+$$
+\mathcal F_n^X
+=
+\sigma(X_0,X_1,\ldots,X_n).
+$$
+
+**Lemma.** Let $\{X_n\}_{n\geq0}$ be a Markov chain with countable state space $S$. If $f:S\to[0,\infty]$ is Borel measurable, then
+
+$$
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right)
+\quad\text{a.s.}
+\tag{7}
+$$
+
+If $f(X_{n+1})$ is integrable, then the same conclusion holds for real-valued $f$.
+
+### Proof
+
+We prove this in the same order in which measurable functions are built: first indicators, then simple functions, and finally general nonnegative measurable functions.
+
+#### Step 1: Indicator functions
+
+Fix $j\in S$ and take
+
+$$
+f(x)=\mathbf 1_{\{j\}}(x).
+$$
+
+Then
+
+$$
+f(X_{n+1})
+=
+\mathbf 1_{\{X_{n+1}=j\}}.
+$$
+
+For every $i_0,\ldots,i_n\in S$ for which
+
+$$
+\mathbb P(X_0=i_0,\ldots,X_n=i_n)>0,
+$$
+
+we have
+
+$$
+\begin{aligned}
+&\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}=j\}}
+\mid
+X_0=i_0,\ldots,X_n=i_n
+\right)\\
+&\qquad =
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_0=i_0,\ldots,X_n=i_n
+\right).
+\end{aligned}
+$$
+
+By the Markov property,
+
+$$
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_0=i_0,\ldots,X_n=i_n
+\right)
+=
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n
+\right).
+$$
+
+Again using the relation between indicators and conditional probabilities,
+
+$$
+\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i_n
+\right)
+=
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}=j\}}
+\mid
+X_n=i_n
+\right).
+$$
+
+Hence
+
+$$
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}=j\}}
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}=j\}}
+\mid
+X_n
+\right)
+\quad\text{a.s.}
+\tag{8}
+$$
+
+The same conclusion holds for the indicator of an arbitrary subset $A\subseteq S$.
+
+Indeed, because $S$ is countable,
+
+$$
+\mathbf 1_{\{X_{n+1}\in A\}}
+=
+\sum_{j\in A}\mathbf 1_{\{X_{n+1}=j\}},
+$$
+
+where the sum is understood as the increasing limit of the finite partial sums. Equivalently, one may simply sum the conditional probabilities over $j\in A$. Thus
+
+$$
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}\in A\}}
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}\in A\}}
+\mid
+X_n
+\right).
+\tag{9}
+$$
+
+#### Step 2: Simple functions
+
+Now let $f$ be a nonnegative simple function on $S$. Write
+
+$$
+f
+=
+\sum_{r=1}^{m}a_r\mathbf 1_{A_r},
+\qquad
+a_r\geq0,
+$$
+
+where $A_r\subseteq S$.
+
+Then
+
+$$
+f(X_{n+1})
+=
+\sum_{r=1}^{m}
+a_r
+\mathbf 1_{\{X_{n+1}\in A_r\}}.
+$$
+
+Using linearity of conditional expectation and (9),
+
+$$
+\begin{aligned}
+&\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)\\
+&\qquad =
+\sum_{r=1}^{m}
+a_r
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}\in A_r\}}
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)\\
+&\qquad =
+\sum_{r=1}^{m}
+a_r
+\mathbb E
+\left(
+\mathbf 1_{\{X_{n+1}\in A_r\}}
+\mid
+X_n
+\right)\\
+&\qquad =
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+\end{aligned}
+\tag{10}
+$$
+
+Thus the result is true for every nonnegative simple function.
+
+#### Step 3: Nonnegative Borel functions
+
+Let now
+
+$$
+f:S\to[0,\infty]
+$$
+
+be Borel measurable.
+
+There exists a sequence of nonnegative simple functions $f_m$ such that
+
+$$
+f_m\uparrow f
+$$
+
+pointwise.
+
+Therefore
+
+$$
+f_m(X_{n+1})
+\uparrow
+f(X_{n+1}).
+$$
+
+For each $m$, Step 2 gives
+
+$$
+\mathbb E
+\left(
+f_m(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f_m(X_{n+1})
+\mid
+X_n
+\right).
+\tag{11}
+$$
+
+Conditional expectation respects increasing limits: if $Y_m\uparrow Y$ with all $Y_m\geq0$, then
+
+$$
+\mathbb E(Y_m\mid\mathcal G)
+\uparrow
+\mathbb E(Y\mid\mathcal G)
+\quad\text{a.s.}
+$$
+
+Hence, letting $m\to\infty$ in (11),
+
+$$
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+$$
+
+This proves (7) for every nonnegative Borel function $f$.
+
+Finally, if $f(X_{n+1})$ is integrable, write
+
+$$
+f=f^+-f^-.
+$$
+
+Both $f^+$ and $f^-$ are nonnegative, so applying the result to them separately and subtracting gives
+
+$$
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+$$
+
+This completes the proof.
+
+### Remark: the converse
+
+The converse is immediate once the statement is assumed for every Borel function $f$.
+
+Suppose
+
+$$
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right)
+$$
+
+for every bounded Borel $f$.
+
+Take
+
+$$
+f(x)=\mathbf 1_{\{j\}}(x).
+$$
+
+Then
+
+$$
+\begin{aligned}
+&\mathbb P
+\left(
+X_{n+1}=j
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)\\
+&\qquad =
+\mathbb P(X_{n+1}=j\mid X_n),
+\end{aligned}
+$$
+
+which is precisely the Markov property.
+
+Notice that equality only for the particular choice $f(x)=x$ would not be enough: equality of conditional means does not in general determine equality of conditional distributions. The statement for all indicator functions, or equivalently all bounded Borel functions, does.
+
+## 4. We need not condition on consecutive past times
+
+A useful consequence of the lemma is that the earlier times appearing in the conditioning need not be consecutive.
+
+Let
+
+$$
+0\leq r_1<r_2<\cdots<r_k<n
+$$
+
+and consider
+
+$$
+\mathcal G
+=
+\sigma(X_{r_1},\ldots,X_{r_k},X_n).
+$$
+
+Then
+
+$$
+\mathcal G
+\subseteq
+\sigma(X_0,\ldots,X_n).
+$$
+
+Let $f:S\to[0,\infty]$ be Borel measurable. By the tower property,
+
+$$
+\begin{aligned}
+&\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\mathcal G
+\right)\\
+&\qquad =
+\mathbb E
+\left[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+\Bigm|
+\mathcal G
+\right].
+\end{aligned}
+$$
+
+By the lemma,
+
+$$
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_n)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+$$
+
+Therefore
+
+$$
+\begin{aligned}
+&\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\mathcal G
+\right)\\
+&\qquad =
+\mathbb E
+\left[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right)
+\Bigm|
+\mathcal G
+\right].
+\end{aligned}
+$$
+
+But
+
+$$
+\mathbb E(f(X_{n+1})\mid X_n)
+$$
+
+is $\sigma(X_n)$-measurable, and
+
+$$
+\sigma(X_n)\subseteq\mathcal G.
+$$
+
+Hence
+
+$$
+\mathbb E
+\left[
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right)
+\Bigm|
+\mathcal G
+\right]
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+$$
+
+Thus
+
+$$
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_{r_1},\ldots,X_{r_k},X_n
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_n
+\right).
+\tag{12}
+$$
+
+Taking
+
+$$
+f(x)=\mathbf 1_{\{j\}}(x)
+$$
+
+gives
+
+$$
+\begin{aligned}
+&\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_n=i,\,
+X_{r_1}=i_1,\ldots,X_{r_k}=i_k
+\right)\\
+&\qquad =
+\mathbb P(X_{n+1}=j\mid X_n=i),
+\end{aligned}
+\tag{13}
+$$
+
+whenever the conditioning event has positive probability.
+
+So in the Markov property, the past variables we retain need not occur at consecutive times.
+
+## Exercise 1
+
+Let $0\leq k<n+1$.
+
+First prove that
+
+$$
+\begin{aligned}
+&\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_k=i_k,X_{k-1}=i_{k-1},\ldots,X_0=i_0
+\right)\\
+&\qquad =
+\mathbb P(X_{n+1}=j\mid X_k=i_k).
+\end{aligned}
+\tag{14}
+$$
+
+Thus, even when $X_{n+1}$ is several time-steps ahead of $X_k$, the entire history up to time $k$ can be replaced by the single variable $X_k$.
+
+Then prove the corresponding conditional-expectation statement:
+
+$$
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+\sigma(X_0,\ldots,X_k)
+\right)
+=
+\mathbb E
+\left(
+f(X_{n+1})
+\mid
+X_k
+\right)
+\tag{15}
+$$
+
+for every nonnegative Borel $f$, and hence for every integrable $f$.
+
+A natural first step is to prove (14) by induction on $n+1-k$.
+
+The first correct solution posted in the comments, with **Exercise 1** clearly marked, will be cited and added to the notes.
+
+## 5. Transition probabilities as an abstract object
+
+We now forget, for the moment, about an already existing Markov chain and start only with a possible transition rule.
+
+**Definition.** A function
+
+$$
+p:S\times S\longrightarrow\mathbb R
+$$
+
+is called a **transition probability function** if
+
+$$
+p(i,j)\geq0
+$$
+
+for all $i,j\in S$, and
+
+$$
+\sum_{j\in S}p(i,j)=1
+$$
+
+for every $i\in S$.
+
+Thus, for each fixed $i$, the numbers
+
+$$
+\{p(i,j):j\in S\}
+$$
+
+form a probability distribution on $S$.
+
+The transition probabilities of every time-homogeneous Markov chain satisfy these conditions.
+
+The converse question is now natural:
+
+> Given a countable state space $S$ and a transition probability function $p$, can we construct a Markov chain having exactly these transition probabilities?
+
+The answer is yes.
+
+## 6. Construction of a Markov chain from its transition probabilities
+
+Let $S$ be countable and let
+
+$$
+p:S\times S\to[0,1]
+$$
+
+be a transition probability function.
+
+Choose a probability measure $\mu$ on $S$; this will be the distribution of the initial state.
+
+For the construction it is not necessary that every point have positive $\mu$-probability. However, if we want a measure on $S$ having no nonempty null set, we may choose $\mu$ so that
+
+$$
+\mu(i)>0
+$$
+
+for every $i\in S$.
+
+For example, if $S$ is finite, we may take the discrete uniform distribution
+
+$$
+\mu(i)=\frac1{|S|}.
+$$
+
+If
+
+$$
+S=\{s_1,s_2,\ldots\},
+$$
+
+we may take
+
+$$
+\mu(s_r)=\frac1{2^r},
+\qquad r\geq1,
+$$
+
+since
+
+$$
+\sum_{r=1}^{\infty}\frac1{2^r}=1.
+$$
+
+Now take the path space
+
+$$
+\Omega=S^{\mathbb N_0}.
+$$
+
+Thus an element of $\Omega$ is an infinite sequence
+
+$$
+\omega=(\omega_0,\omega_1,\omega_2,\ldots).
+$$
+
+For $n\geq0$, define the coordinate projection
+
+$$
+X_n(\omega)=\omega_n.
+\tag{16}
+$$
+
+We want to put a probability measure on $\Omega$ such that these coordinate projections form a Markov chain with transition probability $p$.
+
+### Exact cylinder sets
+
+For $i_0,\ldots,i_n\in S$, define
+
+$$
+A_{i_0,\ldots,i_n}
+=
+\{
+\omega\in\Omega:
+\omega_0=i_0,\ldots,\omega_n=i_n
+\}.
+\tag{17}
+$$
+
+Thus $A_{i_0,\ldots,i_n}$ is the event that the first $n+1$ coordinates of the path are exactly
+
+$$
+i_0,i_1,\ldots,i_n.
+$$
+
+These sets have the useful property already visible from their definition:
+
+if
+
+$$
+A_{i_0,\ldots,i_n}
+\quad\text{and}\quad
+A_{j_0,\ldots,j_m}
+$$
+
+are two such cylinder sets, then either they are disjoint, or the longer specification extends the shorter one, in which case one cylinder is contained in the other.
+
+For example,
+
+$$
+A_{1,2,3,4}\subseteq A_{1,2},
+$$
+
+whereas
+
+$$
+A_{1,2,3}
+\cap
+A_{1,5}
+=
+\varnothing.
+$$
+
+On an exact cylinder we prescribe
+
+$$
+\boxed{
+\mathbb P(A_{i_0,\ldots,i_n})
+=
+\mu(i_0)
+p(i_0,i_1)
+p(i_1,i_2)
+\cdots
+p(i_{n-1},i_n).
+}
+\tag{18}
+$$
+
+This is the only reasonable formula: start at $i_0$ with probability $\mu(i_0)$, then make the successive transitions
+
+$$
+i_0\to i_1\to\cdots\to i_n.
+$$
+
+The first thing to check is consistency.
+
+If we specify the path only up to $i_n$, then summing over all possibilities for the next state must return the same probability. Indeed,
+
+$$
+\begin{aligned}
+\sum_{j\in S}
+\mathbb P(A_{i_0,\ldots,i_n,j})
+&=
+\sum_{j\in S}
+\mu(i_0)
+p(i_0,i_1)\cdots p(i_{n-1},i_n)p(i_n,j)\\
+&=
+\mu(i_0)
+p(i_0,i_1)\cdots p(i_{n-1},i_n)
+\sum_{j\in S}p(i_n,j)\\
+&=
+\mu(i_0)
+p(i_0,i_1)\cdots p(i_{n-1},i_n)\\
+&=
+\mathbb P(A_{i_0,\ldots,i_n}).
+\end{aligned}
+\tag{19}
+$$
+
+The equality in the third line follows from
+
+$$
+\sum_{j\in S}p(i_n,j)=1.
+$$
+
+More generally, summing over any finite number of unspecified future coordinates gives back the probability of the shorter cylinder.
+
+### The cylinder $\sigma$-field
+
+Let $\mathcal F$ be the $\sigma$-field on $S^{\mathbb N_0}$ generated by the finite-coordinate cylinder sets.
+
+For a completely formal use of the extension theorem, it is convenient to allow a cylinder to specify an arbitrary set of possible values of the first finitely many coordinates.
+
+For $B\subseteq S^{n+1}$, write
+
+$$
+C_n(B)
+=
+\{
+\omega\in\Omega:
+(\omega_0,\ldots,\omega_n)\in B
+\}.
+\tag{20}
+$$
+
+Since $S$ is countable, $S^{n+1}$ is countable. Define
+
+$$
+\mu_n(B)
+=
+\sum_{(i_0,\ldots,i_n)\in B}
+\mu(i_0)
+p(i_0,i_1)\cdots p(i_{n-1},i_n).
+\tag{21}
+$$
+
+Then $\mu_n$ is a probability measure on $S^{n+1}$.
+
+Equation (19) says precisely that these finite-dimensional probability measures are consistent:
+
+$$
+\mu_{n+1}(B\times S)=\mu_n(B).
+\tag{22}
+$$
+
+Thus the probability assigned to a cylinder does not depend on whether we regard it as a condition on the first $n+1$ coordinates or as the same condition with some later coordinates left unrestricted.
+
+The collection of finite-coordinate cylinders is an algebra, and the consistent probabilities above define the usual cylinder premeasure on it. By the Carathéodory extension theorem in its cylinder-set form, this premeasure extends uniquely to a probability measure
+
+$$
+\mathbb P
+$$
+
+on
+
+$$
+(\Omega,\mathcal F).
+$$
+
+Hence we have constructed a genuine probability space carrying the coordinate random variables
+
+$$
+X_n(\omega)=\omega_n.
+$$
+
+## Exercise 2
+
+Prove that the coordinate projections
+
+$$
+X_n(\omega)=\omega_n
+$$
+
+form a time-homogeneous Markov chain on $S$ with transition probability function $p$.
+
+In particular, show that whenever
+
+$$
+\mathbb P
+\left(
+X_0=i_0,\ldots,X_n=i_n
+\right)>0,
+$$
+
+we have
+
+$$
+\begin{aligned}
+&\mathbb P
+\left(
+X_{n+1}=j
+\mid
+X_0=i_0,\ldots,X_n=i_n
+\right)\\
+&\qquad =
+p(i_n,j),
+\end{aligned}
+\tag{23}
+$$
+
+and therefore
+
+$$
+\mathbb P(X_{n+1}=j\mid X_n=i)=p(i,j).
+\tag{24}
+$$
+
+The first correct solution posted in the comments, with **Exercise 2** clearly marked, will be cited and added to the notes.
+
+Consequently, every transition probability function on a countable state space can be realised by a time-homogeneous Markov chain.
+
+## Reference
+
+Richard Durrett, *Essentials of Stochastic Processes*.

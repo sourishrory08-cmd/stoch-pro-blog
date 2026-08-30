@@ -1,0 +1,49 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Stoch Pro"
+  navbar:
+    pinned: true
+    search: true
+    left:
+      - href: index.qmd
+        text: Home
+      - href: lectures.qmd
+        text: Lectures
+
+  page-footer:
+    border: true
+    left: "Stoch Pro"
+    right: "Notes on stochastic processes"
+
+  # Enable after creating the public GitHub repository and configuring Giscus.
+  #
+  # comments:
+  #   giscus:
+  #     repo: YOUR-GITHUB-USERNAME/stoch-pro-blog
+  #     mapping: pathname
+  #     reactions-enabled: true
+  #     input-position: top
+  #     loading: lazy
+  #     theme:
+  #       light: light
+  #       dark: dark_dimmed
+
+format:
+  html:
+    theme:
+      - cosmo
+      - styles.scss
+    toc: true
+    toc-location: right
+    toc-title: "Contents"
+    smooth-scroll: true
+    code-copy: true
+    code-overflow: wrap
+    anchor-sections: true
+    link-external-newwindow: true
+
+execute:
+  freeze: auto

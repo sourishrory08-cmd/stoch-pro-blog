@@ -1,0 +1,199 @@
+/*-- scss:defaults --*/
+
+$body-bg: #fff;
+$body-color: #222;
+$link-color: #4f46a5;
+
+$font-family-sans-serif:
+  -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+$font-family-serif:
+  Georgia, "Times New Roman", serif;
+
+$headings-font-family:
+  -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+$navbar-bg: #fff;
+$navbar-fg: #222;
+
+
+/*-- scss:rules --*/
+
+:root {
+  --ink: #222;
+  --muted: #666;
+  --line: #dedede;
+  --accent: #4f46a5;
+  --accent-soft: #f7f6fc;
+  --exercise: #176b62;
+  --exercise-soft: #f4faf9;
+}
+
+body {
+  font-size: 16px;
+}
+
+p,
+li {
+  line-height: 1.66;
+}
+
+main.content {
+  max-width: 790px;
+}
+
+.navbar {
+  box-shadow: none;
+  border-bottom: 1px solid var(--line);
+  min-height: 56px;
+}
+
+.navbar-brand {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.navbar-nav .nav-link {
+  font-size: 0.94rem;
+}
+
+.quarto-title-block {
+  margin-top: 1.3rem;
+  margin-bottom: 2.2rem;
+}
+
+.quarto-title h1.title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.5rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.quarto-title .subtitle {
+  color: var(--muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.12rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ink);
+}
+
+h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.38rem;
+  border-bottom: 1px solid var(--line);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.58rem;
+  font-weight: 500;
+}
+
+h3 {
+  margin-top: 2rem;
+  font-size: 1.08rem;
+  font-weight: 650;
+}
+
+a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+blockquote {
+  margin: 1.4rem 0;
+  padding: 0.2rem 0 0.2rem 1rem;
+  border-left: 3px solid var(--accent);
+  color: #444;
+  background: transparent;
+}
+
+#TOC {
+  font-size: 0.86rem;
+}
+
+#TOC .active {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+.sidebar nav[role=doc-toc] > ul li a {
+  border-left: none;
+}
+
+.page-footer {
+  margin-top: 4rem;
+  background: #fff;
+  border-top: 1px solid var(--line) !important;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+/* Lecture-note elements for future posts */
+
+.definition,
+.theorem,
+.proposition,
+.lemma,
+.corollary,
+.remark,
+.example,
+.exercise,
+.proof {
+  margin: 1.5rem 0;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+}
+
+.exercise {
+  border-left-color: var(--exercise);
+  background: var(--exercise-soft);
+}
+
+.proof {
+  border-left-color: #888;
+  background: #fafafa;
+}
+
+.definition > :first-child,
+.theorem > :first-child,
+.proposition > :first-child,
+.lemma > :first-child,
+.corollary > :first-child,
+.remark > :first-child,
+.example > :first-child,
+.exercise > :first-child,
+.proof > :first-child {
+  margin-top: 0;
+}
+
+.definition > :last-child,
+.theorem > :last-child,
+.proposition > :last-child,
+.lemma > :last-child,
+.corollary > :last-child,
+.remark > :last-child,
+.example > :last-child,
+.exercise > :last-child,
+.proof > :last-child {
+  margin-bottom: 0;
+}
+
+.math.display {
+  overflow-x: auto;
+}
+
+@media (max-width: 760px) {
+  .quarto-title h1.title {
+    font-size: 2.1rem;
+  }
+
+  main.content {
+    max-width: 100%;
+  }
+}

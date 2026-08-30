@@ -1,0 +1,17 @@
+{
+  "index.qmd": {
+    "index.html": "c28c9119"
+  },
+  "lectures.qmd": {
+    "lectures.html": "1a6b67ed"
+  },
+  "posts/01-the-markov-property.qmd": {
+    "01-the-markov-property.html": "3284b229"
+  },
+  "posts/01-the-markov-property-quarto-safe.qmd": {
+    "01-the-markov-property-quarto-safe.html": "cf5ef284"
+  },
+  "posts/01-markov-chains-lecture-1.qmd": {
+    "01-markov-chains-lecture-1.html": "8604774c"
+  }
+}
